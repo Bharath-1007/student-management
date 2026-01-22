@@ -24,7 +24,7 @@ function Settings() {
               type="button"
               btnclass="btn-primary"
               btnlabel="Add Admin"
-              onclick={()=>navigate("addadmin")}
+              onclick={() => navigate("addadmin")}
             />
           </div>
           <div className="col">
@@ -33,7 +33,7 @@ function Settings() {
               type="button"
               btnclass="btn-primary"
               btnlabel="Edit Student"
-              onclick={()=>navigate("editstudent")}
+              onclick={() => navigate("editstudent")}
             />
           </div>
           <div className="col">

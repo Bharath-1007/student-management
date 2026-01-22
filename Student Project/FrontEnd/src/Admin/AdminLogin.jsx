@@ -1,14 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FormInput from "../Components/FormInput";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function AdminLogin() {
-  const [regNo, setRegNo] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const data = { email,password };
+    try {
+      const res = await fetch("http://localhost:9090/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const text = await res.text();
+
+      if (res.status === 200) {
+        alert(text);
+        navigate("/admin/admindashboard");
+      } else if (res.status === 401) {
+        alert("Invalid email or password");
+      } else {
+        alert("Server error");
+      }
+    } catch (err) {
+      alert("Backend not running");
+    }
   };
+  
+ 
 
   return (
     <div className="d-flex justify-content-center align-items-center full-height">
@@ -21,8 +46,8 @@ function AdminLogin() {
         </label>
         <FormInput
           type={"email"}
-          value={regNo}
-          onChange={(e) => setRegNo(e.target.value)}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </div>
 

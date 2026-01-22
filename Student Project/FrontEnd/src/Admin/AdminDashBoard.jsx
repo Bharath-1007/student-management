@@ -8,16 +8,19 @@ export const adminLinks = [
   { path: "settings", label: "Settings", icon: "bi bi-activity" },
 ];
 
-function AdminDashboard() {
+function AdminDashBoard() {
   return (
+    <>
+    
     <div className="d-flex">
-      <SideNavBar portalName="Student" links={adminLinks} />
+      <SideNavBar portalName="Admin" links={adminLinks} />
       <div className="flex-grow-1 p-4">
         {/* This is where child routes render */}
         <Outlet />
       </div>
     </div>
+    </>
   );
 }
 
-export default AdminDashboard;
+export default AdminDashBoard;

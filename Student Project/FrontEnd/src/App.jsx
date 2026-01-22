@@ -7,12 +7,11 @@ import Dashboard from "./Student/DashBoard";
 import NewForm from "./Student/NewForm";
 import History from "./Student/History";
 import Status from "./Student/Status";
-import AdminDashboard from "./Admin/AdminDashBoard";
 import Settings from "./Admin/Settings";
 import AddStudent from "./Admin/AddStudent";
 import AddAdmin from "./Admin/AddAdmin";
 import EditStudent from "./Admin/EditStudent";
-
+import AdminDashboard from "./Admin/AdminDashBoard";
 function App() {
   return (
     <>
@@ -30,16 +29,15 @@ function App() {
             <Route path="status" element={<Status />} />
           </Route>
 
-        <Route path="/admin/dashboard" element={<AdminDashboard/>}>
-            {/* <Route path="studenthistory" element={<StudentHistory />} />
-            <Route path="analytics" element={<Analytics />} /> */}
+        <Route path="admin/admindashboard" element={<AdminDashboard />}>
+          {/* <Route path="studenthistory" element={<StudentHistory />} />
+          <Route path="analytics" element={<Analytics />} /> */}
           <Route path="settings" element={<Settings />}>
-          <Route path="addstudent" element={<AddStudent />} />
-          <Route path="addadmin" element={<AddAdmin />} />
-          <Route path="editstudent" element={<EditStudent />} />
-        </Route>
-
+            <Route path="addstudent" element={<AddStudent />} />
+            <Route path="addadmin" element={<AddAdmin />} />
+            <Route path="editstudent" element={<EditStudent />} />
           </Route>
+        </Route>
 
         </Routes>
       </BrowserRouter>

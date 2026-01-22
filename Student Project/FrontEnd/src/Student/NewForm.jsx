@@ -1,96 +1,208 @@
-import Button from "../Components/Button";
-import FormInput from "../Components/FormInput";
+import { useState } from "react";
+import dept from "../Object/departments";
+import staff from "../Object/staff";
+// 'it' import was unused, removed
+// s_no, advisor, dept, from_date, hod, mentor, name, reason, reg_no, to_date, timestamp
+function NewForm() {
+  const [deptName, setDeptName] = useState("");
+  const [advisorName, setAdvisorName] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [hodName, setHodName] = useState("");
+  const [mentorName, setMetorName] = useState("");
+  const [name, setName] = useState("");
+  const [reason, setReason] = useState("");
+  const [year, setYear] = useState("");
+  const [regNo, setRegNo] = useState("");
 
-function NewForm()
-{
-    return(
-        <>
-        <h3>New On-Duty Application</h3>
-        <p>Please fill the details below correctly</p>
-        <div className="border rounded p-3">
-            <div>
-                <i class="bi bi-person-fill"><span>Student Details</span></i>
-                <hr />
+  function handle(e) {
+    e.preventDefault(); // prevent page reload
+
+    const newFormData = {
+      name,
+      advisorName,
+      deptName,
+      fromDate,
+      toDate,
+      mentorName,
+      hodName,
+      reason,
+      regNo,
+      year,
+    };
+
+    fetch("http://localhost:9090/student/newform", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newFormData),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("HTTP error");
+        return res.json();
+      })
+      .then(() => alert("Form Submitted"))
+      .catch((err) => console.error("Fetch error:", err));
+  }
+
+  return (
+    <>
+      <p>Student</p>
+      <hr />
+      <div>
+        <h1>New On-Duty Application</h1>
+        <p>Please fill in the details below for admin approval.</p>
+      </div>
+      <div>
+        <p>STUDENT DETAILS</p>
+        <hr />
+        <form onSubmit={handle}>
+          <div className="row">
+            <div className="col">
+              <h5>Full Name</h5>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter Name"
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
             </div>
 
-            <div className="row">
-                    <div className="col">
-                    <label>Full Name</label>
-                    <FormInput type="text" />
-                    </div>
-                    <div className="col">
-                        <label>Register Number</label>
-                        <FormInput type="number" />
-                    </div>
+            <div className="col">
+              <h5>Register Number</h5>
+              <input
+                type="number"
+                className="form-control"
+                placeholder="Ex-611223205001"
+                onChange={(e) => setRegNo(e.target.value)}
+                required
+              />
             </div>
-            <div className="row">
-                <div className="col">
-                <label>Select Departartment</label>
-                <select className="form-select">
-                    <option selected>--Select Deptartment--</option>
-                    <option>CSE</option>
-                    <option>IT</option>
-                    <option>AIDS</option>
-                    <option>CSBS</option>
-                </select>
-                </div>
-                <div className="col">
-                    <label>Year</label>
-                    <select className="form-select">
-                        <option selected>--select Year--</option>
-                        <option >I</option>
-                        <option >II</option>
-                        <option >III</option>
-                        <option >IV</option>
-                    </select>
-                </div>
+          </div>
+
+          <div className="row">
+            <div className="col">
+              <h5>Department</h5>
+              <select
+                className="form-select"
+                onChange={(e) => setDeptName(e.target.value)}
+                required
+              >
+                <option value="">--Select Department--</option>
+                {dept.map((i) => (
+                  <option key={i} value={i}>
+                    {i}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="col">
+              <h5>Year</h5>
+              <select
+                className="form-select"
+                onChange={(e) => setYear(e.target.value)}
+                required
+              >
+                <option value="">--Select Year--</option>
+                <option value="I">I</option>
+                <option value="II">II</option>
+                <option value="III">III</option>
+                <option value="IV">IV</option>
+              </select>
+            </div>
+          </div>
+
+          <p>REQUEST DETAILS</p>
+          <hr />
+
+          <div className="row">
+            <div className="col">
+              <h5>From Date</h5>
+              <input
+                type="date"
+                onChange={(e) => setFromDate(e.target.value)}
+                className="form-control"
+                required
+              />
+            </div>
+            <div className="col">
+              <h5>To Date</h5>
+              <input
+                type="date"
+                onChange={(e) => setToDate(e.target.value)}
+                className="form-control"
+                required
+              />
+            </div>
+          </div>
+
+          <h5>Reason</h5>
+          <textarea
+            className="form-control"
+            onChange={(e) => setReason(e.target.value)}
+            required
+          ></textarea>
+
+          <div className="row">
+            <div className="col">
+              <h5>Class Advisor</h5>
+              <select
+                className="form-select"
+                onChange={(e) => setAdvisorName(e.target.value)}
+                disabled={!deptName}
+                required
+              >
+                <option value="">--Select--</option>
+                {(staff[deptName]?.advisor || []).map((n, idx) => (
+                  <option key={idx} value={n}>
+                    {n}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            <div>
-                <i class="bi bi-file-earmark-text-fill"><span>Request   Details</span></i>
-                <hr />
+            <div className="col">
+              <h5>Mentor</h5>
+              <select
+                className="form-select"
+                onChange={(e) => setMetorName(e.target.value)}
+                disabled={!deptName}
+                required
+              >
+                <option value="">--Select--</option>
+                {(staff[deptName]?.mentor || []).map((n, i) => (
+                  <option key={i} value={n}>
+                    {n}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            <div className="row">
-                <div className="col">
-                        <label>Form Date</label>
-                        <FormInput type="date"/>
-                </div>
-                <div className="col">
-                        <label>To Date</label>
-                        <FormInput type="date"/>
-                </div>
+            <div className="col">
+              <h5>HOD</h5>
+              <select
+                className="form-select"
+                onChange={(e) => setHodName(e.target.value)}
+                disabled={!deptName}
+                required
+              >
+                <option value="">--Select--</option>
+                {(staff[deptName]?.hod || []).map((n, i) => (
+                  <option key={i} value={n}>
+                    {n}
+                  </option>
+                ))}
+              </select>
             </div>
+          </div>
 
-            <div className="row">
-                <label className="col">Reason for OD</label>
-                <p className="col">Max 100 letter</p>
-                <textarea className="form-control" placeholder="text Here..."></textarea>
-            </div>
-
-            <div className="row">
-                <div className="col">
-                        <label>Class Advisor</label>
-                        <select className="form-select">
-                            <option>--select Advisor--</option>
-                        </select>
-                </div>
-                <div className="col">
-                        <label>Mentor</label>
-                        <select className="form-select">
-                            <option>--select Mentor--</option>
-                        </select>
-                </div>
-                <div className="col">
-                        <label>HOD</label>
-                        <select className="form-select">
-                            <option>--select HOD--</option>
-                        </select>
-                </div>
-            </div>
-        <Button type="submit" btnlabel="Submit" btnclass="btn-primary"/>
-        </div>
-        </>
-    );
+          <div className="mt-4 d-flex justify-content-center">
+            <input type="submit" className="btn btn-primary w-50" />
+          </div>
+        </form>
+      </div>
+    </>
+  );
 }
+
 export default NewForm;
